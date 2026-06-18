@@ -1,0 +1,55 @@
+variable "environment_name" {
+  description = "Name of the environment"
+  type        = string
+}
+
+variable "region" {
+  description = "AWS region"
+  type        = string
+  default     = "us-east-1"
+}
+
+variable "cluster_version" {
+  description = "EKS cluster version."
+  type        = string
+  default     = "1.34"
+}
+
+variable "tags" {
+  description = "List of tags to be associated with resources."
+  default     = {}
+  type        = map(string)
+}
+
+variable "vpc_id" {
+  description = "VPC ID used to create EKS cluster."
+  type        = string
+}
+
+variable "vpc_cidr" {
+  description = "VPC ID used to create EKS cluster."
+  type        = string
+}
+
+variable "subnet_ids" {
+  description = "List of private subnet IDs used by EKS cluster nodes."
+  type        = list(string)
+}
+
+variable "istio_enabled" {
+  description = "Boolean value that enables istio."
+  type        = bool
+  default     = false
+}
+
+variable "opentelemetry_enabled" {
+  description = "Boolean value that enables OpenTelemetry."
+  type        = bool
+  default     = false
+}
+
+variable "enable_grafana" {
+  description = "Boolean value that enables Amazon Managed Grafana. Requires AWS SSO to be configured in the account."
+  type        = bool
+  default     = false
+}

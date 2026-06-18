@@ -1,0 +1,55 @@
+image:
+  repository: ${image_repository}
+  tag: ${image_tag}
+
+# Horizontal Pod Autoscaler
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 70
+
+app:
+  endpoints:
+    catalog: http://catalog.catalog.svc:80
+    carts: http://carts.carts.svc:80
+    orders: http://orders.orders.svc:80
+    checkout: http://checkout.checkout.svc:80
+
+%{ if opentelemetry_enabled }
+opentelemetry:
+  enabled: true
+  instrumentation: ${opentelemetry_instrumentation}
+%{ endif }
+
+%{ if application_signals_enabled }
+# CloudWatch Application Signals auto-instrumentation (Java)
+podAnnotations:
+  instrumentation.opentelemetry.io/inject-java: "true"
+%{ endif }
+
+%{ if istio_enabled }
+istio:
+  enabled: true
+  hosts:
+  - "*"
+%{ else }
+# Use Ingress with AWS ALB for public access
+service:
+  type: ClusterIP
+
+ingress:
+  enabled: true
+  className: alb
+  # EKS Auto Mode: Create IngressClass and IngressClassParams for ALB
+  createIngressClass: true
+  isDefaultClass: true
+  scheme: internet-facing
+  annotations:
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/healthcheck-path: /actuator/health/liveness
+    alb.ingress.kubernetes.io/tags: eks:eks-cluster-name=retail-store
+    # ALB access logs
+    alb.ingress.kubernetes.io/load-balancer-attributes: access_logs.s3.enabled=true,access_logs.s3.bucket=${alb_logs_bucket},access_logs.s3.prefix=ui-alb
+%{ endif }

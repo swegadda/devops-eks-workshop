@@ -1,0 +1,37 @@
+.DS_Store
+*.tfvars
+.terraform
+*.tfstate*
+*.lock.hcl
+*.log
+.vscode
+reports
+env
+oss-output
+kubeconfig_*
+.idea
+node_modules
+dist
+.venv
+
+ort-build
+
+Chart.lock
+**/charts/*.tgz
+
+.nx/cache
+.nx/workspace-data
+
+screenshots
+# Devenv
+.devenv*
+devenv.local.nix
+
+# direnv
+.direnv
+
+.pre-commit-config.yaml
+
+# Fault injection runtime artifacts
+fault-injection/rds-sg-ids.json
+fault-injection/rds-sg-backup.json
