@@ -1,0 +1,79 @@
+{
+  "uid": "bfpimmgdmbsowf",
+  "folderUID": "ffpig9vi8a9s0a",
+  "ruleGroup": "EKS Crash Alerts",
+  "title": "Pod CrashLoopBackOff",
+  "condition": "B",
+  "data": [
+    {
+      "refId": "A",
+      "queryType": "",
+      "relativeTimeRange": {
+        "from": 300,
+        "to": 0
+      },
+      "datasourceUid": "P7B0976C7A6B9EDA6",
+      "model": {
+        "expr": "increase(kube_pod_container_status_restarts_total[5m])",
+        "instant": true,
+        "intervalMs": 1000,
+        "maxDataPoints": 43200,
+        "refId": "A"
+      }
+    },
+    {
+      "refId": "B",
+      "queryType": "",
+      "relativeTimeRange": {
+        "from": 300,
+        "to": 0
+      },
+      "datasourceUid": "__expr__",
+      "model": {
+        "conditions": [
+          {
+            "evaluator": {
+              "params": [
+                2
+              ],
+              "type": "gt"
+            },
+            "operator": {
+              "type": "and"
+            },
+            "query": {
+              "params": [
+                "A"
+              ]
+            },
+            "reducer": {
+              "params": [],
+              "type": "last"
+            },
+            "type": "query"
+          }
+        ],
+        "datasource": {
+          "type": "__expr__",
+          "uid": "__expr__"
+        },
+        "expression": "A",
+        "intervalMs": 1000,
+        "maxDataPoints": 43200,
+        "refId": "B",
+        "type": "threshold"
+      }
+    }
+  ],
+  "noDataState": "NoData",
+  "execErrState": "Error",
+  "for": "1m",
+  "annotations": {
+    "description": "Container {{ $labels.container }} in pod {{ $labels.pod }} (namespace: {{ $labels.exported_namespace }}) has restarted more than 2 times in the last 5 minutes, indicating a CrashLoopBackOff.",
+    "summary": "Pod {{ $labels.pod }} in namespace {{ $labels.exported_namespace }} is CrashLoopBackOff"
+  },
+  "labels": {
+    "severity": "critical",
+    "team": "devops"
+  }
+}

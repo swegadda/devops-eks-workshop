@@ -1,0 +1,12 @@
+{
+  "name": "DevOps Agent",
+  "type": "webhook",
+  "settings": {
+    "authorization_credentials": "<BEARER_TOKEN>",
+    "authorization_scheme": "Bearer",
+    "httpMethod": "POST",
+    "message": "{{ template \"devops-agent-payload\" . }}",
+    "url": "https://event-ai.us-east-1.api.aws/webhook/generic/c4eb4209-9388-46bd-a464-7a368889d4e4"
+  },
+  "disableResolveMessage": false
+}

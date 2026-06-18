@@ -1,0 +1,79 @@
+{
+  "uid": "dfpigdcc1m48wc",
+  "folderUID": "ffpig9vi8a9s0a",
+  "ruleGroup": "EKS OOM Alerts",
+  "title": "Pod OOMKilled",
+  "condition": "B",
+  "data": [
+    {
+      "refId": "A",
+      "queryType": "",
+      "relativeTimeRange": {
+        "from": 300,
+        "to": 0
+      },
+      "datasourceUid": "P7B0976C7A6B9EDA6",
+      "model": {
+        "expr": "increase(kube_pod_container_status_restarts_total[5m]) > 0 and on(pod, namespace, container) kube_pod_container_status_last_terminated_reason{reason=\"OOMKilled\"} == 1",
+        "instant": true,
+        "intervalMs": 1000,
+        "maxDataPoints": 43200,
+        "refId": "A"
+      }
+    },
+    {
+      "refId": "B",
+      "queryType": "",
+      "relativeTimeRange": {
+        "from": 300,
+        "to": 0
+      },
+      "datasourceUid": "__expr__",
+      "model": {
+        "conditions": [
+          {
+            "evaluator": {
+              "params": [
+                0
+              ],
+              "type": "gt"
+            },
+            "operator": {
+              "type": "and"
+            },
+            "query": {
+              "params": [
+                "A"
+              ]
+            },
+            "reducer": {
+              "params": [],
+              "type": "last"
+            },
+            "type": "query"
+          }
+        ],
+        "datasource": {
+          "type": "__expr__",
+          "uid": "__expr__"
+        },
+        "expression": "A",
+        "intervalMs": 1000,
+        "maxDataPoints": 43200,
+        "refId": "B",
+        "type": "threshold"
+      }
+    }
+  ],
+  "noDataState": "NoData",
+  "execErrState": "Error",
+  "for": "1m",
+  "annotations": {
+    "description": "Container {{ $labels.container }} in pod {{ $labels.pod }} (namespace: {{ $labels.namespace }}) has been OOMKilled. The container exceeded its memory limit and was terminated by the kernel.",
+    "summary": "Pod {{ $labels.pod }} in namespace {{ $labels.namespace }} was OOMKilled"
+  },
+  "labels": {
+    "severity": "critical",
+    "team": "devops"
+  }
+}

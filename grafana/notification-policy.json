@@ -1,0 +1,19 @@
+{
+  "receiver": "grafana-default-email",
+  "group_by": ["grafana_folder", "alertname"],
+  "routes": [
+    {
+      "receiver": "DevOps Agent",
+      "matchers": [
+        "team = devops"
+      ],
+      "group_wait": "30s",
+      "group_interval": "5m",
+      "repeat_interval": "1h",
+      "continue": false
+    }
+  ],
+  "group_wait": "30s",
+  "group_interval": "5m",
+  "repeat_interval": "4h"
+}
